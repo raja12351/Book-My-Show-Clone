@@ -3,7 +3,10 @@ package com.example.BookmyShow.Models;
 import com.example.BookmyShow.Enums.Genre;
 import com.example.BookmyShow.Enums.Language;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -12,6 +15,9 @@ import java.util.List;
 @Entity
 @Table(name = "movies")
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Movie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,6 +27,7 @@ public class Movie {
     private String movieName;
 
     private double duration;
+
     @Column(scale = 2)
     private double rating;
 
