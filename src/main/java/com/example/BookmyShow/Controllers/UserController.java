@@ -2,6 +2,7 @@ package com.example.BookmyShow.Controllers;
 
 import com.example.BookmyShow.Dtos.RequestDtos.AddUserDto;
 import com.example.BookmyShow.Dtos.ResponseDtos.UserResponseDto;
+import com.example.BookmyShow.Exceptions.NoUserFoundException;
 import com.example.BookmyShow.Models.User;
 import com.example.BookmyShow.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ import java.util.List;
 public class UserController {
 
     @Autowired
-    private UserService userService;
+    UserService userService;
 
     @PostMapping("/addUser")
     public ResponseEntity<String> addUser(@RequestBody AddUserDto addUserDto){
@@ -46,7 +47,11 @@ public class UserController {
 
     @GetMapping("/getAllUsers")
     public ResponseEntity<List<User>> getUserOlderThan(@RequestParam int age){
-        List<User> userList = userService.getOlderThan(age);
-        return new ResponseEntity<>(userList, HttpStatus.OK);
+        try {
+            List<User> userList = userService.getOlderThan(age);
+            return new ResponseEntity<>(userList, HttpStatus.OK);
+        }catch(Exception e){
+            return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+        }
     }
 }

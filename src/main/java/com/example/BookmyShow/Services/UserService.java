@@ -18,7 +18,7 @@ import java.util.List;
 public class UserService {
 
     @Autowired
-    private UserRepository userRepository;
+    UserRepository userRepository;
     public String addUser(AddUserDto addUserDto) throws MobileNoException, EmailException {
         User user = UserTransformer.convertDtoToEntity(addUserDto);
 
@@ -56,9 +56,12 @@ public class UserService {
         return responseDto;
     }
 
-    public List<User> getOlderThan(int age) {
+    public List<User> getOlderThan(int age) throws NoUserFoundException {
         List<User> userList = userRepository.findUserWithGreaterAge(age);
 
+        if(userList.isEmpty()){
+            throw new NoUserFoundException("No user Found above the given age.");
+        }
         return userList;
     }
 }
