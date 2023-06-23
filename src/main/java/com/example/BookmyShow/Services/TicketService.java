@@ -55,7 +55,7 @@ public class TicketService {
             throw new SeatNotAvailableException("Requested seats are not available.");
         }
 
-        int totalPrice = calculateTotalPrice(show,ticketRequestDto.getRequestedSeats());
+        int totalPrice = calculateTotalPrice(show,ticketRequestDto.getRequestedSeats(), ticketRequestDto.isHaveSnacksIncluded());
 
         Ticket ticket = new Ticket();
         ticket.setTotalTicketPrice(totalPrice);
@@ -87,14 +87,19 @@ public class TicketService {
         return true;
     }
 
-    private int calculateTotalPrice(Show show, List<String> requestedSeats){
+    private int calculateTotalPrice(Show show, List<String> requestedSeats, boolean isSnacksIncluded){
         List<ShowSeat> showSeatList = show.getShowSeatList();
         int totalPrice = 0;
 
         for(ShowSeat showSeat : showSeatList){
-            if(requestedSeats.contains(showSeat)){
+            if(requestedSeats.contains(showSeat.getSeatNo())){
                 totalPrice += showSeat.getPrice();
                 showSeat.setBooked(true);
+
+                //setting booking of snacks from here
+                if(isSnacksIncluded){
+                    showSeat.setSnacksAdded(true);
+                }
             }
         }
 
