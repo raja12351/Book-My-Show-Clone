@@ -25,9 +25,9 @@ public class Theater {
 
     private String location;
 
-    @OneToMany(mappedBy = "theaters", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "theater", cascade = CascadeType.ALL)
     private List<Show> showList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "theaters", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "theater", cascade = CascadeType.ALL)
     private List<TheaterSeat> theaterSeatList = new ArrayList<>();
 }

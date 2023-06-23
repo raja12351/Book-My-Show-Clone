@@ -39,6 +39,6 @@ public class Movie {
     @Enumerated(EnumType.STRING)
     private Language language;
 
-    @OneToMany(mappedBy = "movies", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
     private List<Show> showList = new ArrayList<>();
 }

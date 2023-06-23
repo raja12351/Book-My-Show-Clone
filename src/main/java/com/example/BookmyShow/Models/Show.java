@@ -35,6 +35,9 @@ public class Show {
     @JoinColumn
     private Theater theater;
 
-    @OneToMany(mappedBy = "shows", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "show", cascade = CascadeType.ALL)
     private List<ShowSeat> showSeatList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "show", cascade = CascadeType.ALL)
+    private List<Ticket> ticketList = new ArrayList<>();
 }
