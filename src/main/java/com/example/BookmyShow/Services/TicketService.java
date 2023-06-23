@@ -7,10 +7,12 @@ import com.example.BookmyShow.Exceptions.SeatNotAvailableException;
 import com.example.BookmyShow.Exceptions.ShowNotFoundException;
 import com.example.BookmyShow.Models.Show;
 import com.example.BookmyShow.Models.ShowSeat;
+import com.example.BookmyShow.Models.Ticket;
 import com.example.BookmyShow.Models.User;
 import com.example.BookmyShow.Repository.ShowRepository;
 import com.example.BookmyShow.Repository.TicketRepository;
 import com.example.BookmyShow.Repository.UserRepository;
+import com.example.BookmyShow.Transformers.TicketTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -52,6 +54,26 @@ public class TicketService {
         if(!isValid){
             throw new SeatNotAvailableException("Requested seats are not available.");
         }
+
+        int totalPrice = calculateTotalPrice(show,ticketRequestDto.getRequestedSeats());
+
+        Ticket ticket = new Ticket();
+        ticket.setTotalTicketPrice(totalPrice);
+
+        String bookedSeats = TicketTransformer.convertListToString(ticketRequestDto.getRequestedSeats());
+        ticket.setSeatsBooked(bookedSeats);
+
+        ticket = ticketRepository.save(ticket);
+
+        user.getTicketList().add(ticket);
+        show.getTicketList().add(ticket);
+
+        userRepository.save(user);
+        showRepository.save(show);
+
+        TicketResponseDto ticketResponseDto = TicketTransformer.convertEntityToDto(ticket, show);
+
+        return ticketResponseDto;
     }
 
     private boolean validateRequestedSeats(Show show, List<String> requestedSeats){
@@ -63,5 +85,19 @@ public class TicketService {
             }
         }
         return true;
+    }
+
+    private int calculateTotalPrice(Show show, List<String> requestedSeats){
+        List<ShowSeat> showSeatList = show.getShowSeatList();
+        int totalPrice = 0;
+
+        for(ShowSeat showSeat : showSeatList){
+            if(requestedSeats.contains(showSeat)){
+                totalPrice += showSeat.getPrice();
+                showSeat.setBooked(true);
+            }
+        }
+
+        return totalPrice;
     }
 }
