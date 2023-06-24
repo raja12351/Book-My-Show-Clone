@@ -26,6 +26,8 @@ public class TicketResponseDto {
 
     private String bookedSeats;
 
+    private int totalPrice;
+
     private String statusCode;
 
     private String statusMessage;

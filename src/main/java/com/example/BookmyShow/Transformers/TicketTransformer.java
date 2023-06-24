@@ -24,7 +24,7 @@ public class TicketTransformer {
         TicketResponseDto ticketResponseDto = TicketResponseDto.builder().bookedSeats(ticket.getSeatsBooked())
                 .showDate(show.getShowDate()).location(show.getTheater().getLocation())
                 .movieName(show.getMovie().getMovieName()).theaterName(show.getTheater().getName())
-                .showTime(show.getShowTime()).build();
+                .showTime(show.getShowTime()).totalPrice(ticket.getTotalTicketPrice()).build();
 
         return ticketResponseDto;
     }
