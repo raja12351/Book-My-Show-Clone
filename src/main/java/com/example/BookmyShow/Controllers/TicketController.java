@@ -28,7 +28,7 @@ public class TicketController {
         }catch(Exception e){
             TicketResponseDto responseDto = new TicketResponseDto();
             responseDto.setStatusCode("500");
-            responseDto.setStatusMessage("Ticket is not booked yet.");
+            responseDto.setStatusMessage(e.getMessage());
             return new ResponseEntity<>(responseDto, HttpStatus.BAD_REQUEST);
         }
     }

@@ -14,6 +14,8 @@ import com.example.BookmyShow.Repository.TicketRepository;
 import com.example.BookmyShow.Repository.UserRepository;
 import com.example.BookmyShow.Transformers.TicketTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,6 +32,9 @@ public class TicketService {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    JavaMailSender emailSender;
 
     public TicketResponseDto bookTicket(TicketRequestDto ticketRequestDto) throws NoUserFoundException, ShowNotFoundException, SeatNotAvailableException {
         int userId = ticketRequestDto.getUserId();
@@ -63,6 +68,9 @@ public class TicketService {
         String bookedSeats = TicketTransformer.convertListToString(ticketRequestDto.getRequestedSeats());
         ticket.setSeatsBooked(bookedSeats);
 
+        ticket.setUser(user);
+        ticket.setShow(show);
+
         ticket = ticketRepository.save(ticket);
 
         user.getTicketList().add(ticket);
@@ -70,6 +78,22 @@ public class TicketService {
 
         userRepository.save(user);
         showRepository.save(show);
+
+        //sending mail for booking information
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+
+        String body = "Hi "+ user + ","+"\n"+
+                "Your have successfully booked seats : " + bookedSeats + "for the movie " + show.getMovie().getMovieName() +
+                "on " + show.getShowDate() + " at " + show.getShowTime() + "\n" +
+                "Thank you for the booking ,enjoy the show.";
+
+        mailMessage.setSubject("Booking Confirmation!");
+        mailMessage.setText(body);
+        mailMessage.setTo(user.getEmailId());
+        mailMessage.setFrom("springtesting17@gmail.com");
+
+        emailSender.send(mailMessage);
+
 
         TicketResponseDto ticketResponseDto = TicketTransformer.convertEntityToDto(ticket, show);
 

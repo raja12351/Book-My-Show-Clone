@@ -40,7 +40,7 @@ public class UserController {
         }catch(Exception e){
             UserResponseDto userResponseDto = new UserResponseDto();
             userResponseDto.setStatusCode("500");
-            userResponseDto.setStatusMessage("Failed to find");
+            userResponseDto.setStatusMessage(e.getMessage());
             return new ResponseEntity<>(userResponseDto, HttpStatus.NOT_FOUND);
         }
     }
