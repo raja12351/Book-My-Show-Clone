@@ -1,7 +1,9 @@
 package com.example.BookmyShow.Services;
 
 import com.example.BookmyShow.Dtos.RequestDtos.AddShowDto;
+import com.example.BookmyShow.Dtos.RequestDtos.MaxShowDto;
 import com.example.BookmyShow.Dtos.RequestDtos.ShowSeatDto;
+import com.example.BookmyShow.Dtos.ResponseDtos.QueryResponseDto;
 import com.example.BookmyShow.Enums.SeatType;
 import com.example.BookmyShow.Exceptions.MovieNotFoundException;
 import com.example.BookmyShow.Exceptions.ShowNotFoundException;
@@ -10,10 +12,12 @@ import com.example.BookmyShow.Models.*;
 import com.example.BookmyShow.Repository.MovieRepository;
 import com.example.BookmyShow.Repository.ShowRepository;
 import com.example.BookmyShow.Repository.TheaterRepository;
+import com.example.BookmyShow.Transformers.MovieTransformer;
 import com.example.BookmyShow.Transformers.ShowTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -93,5 +97,21 @@ public class ShowService {
         showRepository.save(show);
 
         return "Show seats has been successfully associated with the show.";
+    }
+
+    public QueryResponseDto getMovieWithMaxShow(MaxShowDto showDto) throws MovieNotFoundException{
+        Date date = showDto.getShowDate();
+
+        Integer movieId = showRepository.getMostShowMovie(date);
+
+        if(movieId==null){
+            throw new MovieNotFoundException("There is no movie with given id : " + movieId);
+        }
+
+        Movie movie = movieRepository.findById(movieId).get();
+
+        QueryResponseDto responseDto = MovieTransformer.detailsToDto(movie,movieId);
+
+        return responseDto;
     }
 }
