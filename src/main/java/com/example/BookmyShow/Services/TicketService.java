@@ -79,13 +79,15 @@ public class TicketService {
         userRepository.save(user);
         showRepository.save(show);
 
-        //sending mail for booking information
+        TicketResponseDto ticketResponseDto = TicketTransformer.convertEntityToDto(ticket, show);
+
+//        sending mail for booking information
         SimpleMailMessage mailMessage = new SimpleMailMessage();
 
-        String body = "Hi "+ user + ","+"\n"+
+        String body = "Hi "+ user.getUserName() + ","+"\n"+
                 "Your have successfully booked seats : " + bookedSeats + "for the movie " + show.getMovie().getMovieName() +
-                "on " + show.getShowDate() + " at " + show.getShowTime() + "\n" +
-                "Thank you for the booking ,enjoy the show.";
+                " on " + show.getShowDate() + " at " + show.getShowTime() + "\n" +
+                "Thank you for the booking ,Enjoy the show.";
 
         mailMessage.setSubject("Booking Confirmation!");
         mailMessage.setText(body);
@@ -94,8 +96,6 @@ public class TicketService {
 
         emailSender.send(mailMessage);
 
-
-        TicketResponseDto ticketResponseDto = TicketTransformer.convertEntityToDto(ticket, show);
 
         return ticketResponseDto;
     }

@@ -3,6 +3,8 @@ package com.example.BookmyShow.Dtos.RequestDtos;
 import com.example.BookmyShow.Enums.Genre;
 import com.example.BookmyShow.Enums.Language;
 import com.fasterxml.jackson.databind.DatabindException;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.Data;
 
 import java.util.Date;
@@ -18,7 +20,9 @@ public class MovieDto {
 
     private Date releaseDate;
 
+    @Enumerated(EnumType.STRING)
     private Genre genre;
 
+    @Enumerated(EnumType.STRING)
     private Language language;
 }
