@@ -8,7 +8,7 @@ public class UserTransformer {
 
     public static User convertDtoToEntity(AddUserDto userDto){
         User user = User.builder().userName(userDto.getName()).age(userDto.getAge())
-                .emailId(userDto.getEmail()).mobileNo(userDto.getMobileNo()).build();
+                .emailId(userDto.getEmailId()).mobileNo(userDto.getMobileNo()).build();
 
         return user;
     }

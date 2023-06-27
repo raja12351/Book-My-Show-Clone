@@ -29,7 +29,7 @@ public class TheaterService {
 
         theaterRepository.save(theater);
 
-        return theater.getName() + "Theater is added successfully.";
+        return theater.getName() + " Theater is added successfully.";
     }
 
     public String addTheaterSeats(AddTheaterSeatDto addTheaterSeatDto) throws TheaterNotFoundException{
