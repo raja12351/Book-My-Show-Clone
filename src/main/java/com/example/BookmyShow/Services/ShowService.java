@@ -94,6 +94,7 @@ public class ShowService {
 
             showSeatList.add(showSeat);
         }
+        show.setShowSeatList(showSeatList);
         showRepository.save(show);
 
         return "Show seats has been successfully associated with the show.";
